@@ -3,30 +3,34 @@ import random
 
 class JeopardyGame:
     def __init__(self):
+        # Initierar spelarens namn, kategori, svårighetsgrad och antal frågor
         self.player_name = ""
-        self.category = 9
-        self.difficulty = 'easy'
-        self.amount = 10
+        self.category = 9 # Standardkategori (General Knowledge)
+        self.difficulty = 'easy' # Standard svårighetsgrad
+        self.amount = 10 # Standard antal frågor att spela
 
     def fetch_questions(self):
+        # Funktion för att hämta frågor från OpenTDB API
         url = f'https://opentdb.com/api.php?amount={self.amount}&category={self.category}&difficulty={self.difficulty}&type=multiple'
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            return data['results']
+            return data['results'] # Returnerar en lista med frågor och svar
         else:
             print(f"Failed to fetch questions, status code: {response.status_code}")
-            return []
+            return []  # Returnerar en tom lista om något gick fel vid hämtningen
 
     def format_question(self, question_data):
+        # Formaterar frågan och dess svarsalternativ
         question = question_data['question']
         correct_answer = question_data['correct_answer']
         incorrect_answers = question_data['incorrect_answers']
         options = incorrect_answers + [correct_answer]
-        random.shuffle(options)
+        random.shuffle(options) # Blandar svarsalternativen
         return question, options, correct_answer
 
     def play_game(self, questions):
+        # Funktion för att spela spelet med de hämtade frågorna
         score = 0
         for i, q_data in enumerate(questions):
             question, options, correct_answer = self.format_question(q_data)
@@ -56,7 +60,13 @@ class JeopardyGame:
             choice = input("Enter your choice (1/2): ")
             
             if choice == '1':
-                self.player_name = input("Enter your name: ")
+                while True:
+                    self.player_name = input("Enter your first name only: ")
+                    # Validera namnet
+                    if self.player_name.strip() and self.player_name.isalnum(): # Denna kod använder strip() för att ta bort eventuella tomma mellanslag från början och slutet av strängen och isalnum() för att kontrollera om namnet endast innehåller alfanumeriska tecken (bokstäver och siffror)
+                        break
+                    else:
+                        print("Invalid name! Please enter a valid name without any funny business.")
                 
                 print("\nCategories:")
                 print("9: General Knowledge")
