@@ -95,15 +95,19 @@ class JeopardyGame:
                 
                 questions = self.fetch_questions()
                 if questions:
+                    # Funktion för att starta själva spelet efter användarens inputs
                     self.play_game(questions)
                 else:
+                    # I fall om det inte kunde laddas in några frågor
                     print("Could not load questions. Please try again later.")
             
             elif choice == '2':
+                # Om spelaren väljer "quit"
                 print("Thank you for playing! Goodbye!")
                 break
             
             else:
+                # Om spelaren inte väljer 1 eller 2
                 print("Invalid choice. Please select again.")
 
 if __name__ == "__main__":
